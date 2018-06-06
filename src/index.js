@@ -1,8 +1,7 @@
-import fileSize from "filesize";
 import boxen from "boxen";
 import colors from "colors";
 import deepAssign from "deep-assign";
-import gzip from "gzip-size";
+import getData from './getData'
 
 function render(opt, size, gzip, bundle) {
 	const primaryColor = opt.theme === "dark" ? "green" : "black";
@@ -38,16 +37,8 @@ export default function filesize(options = {}) {
 	}
 
 	return {
-		getData(bundle, code) {
-			let size = fileSize(Buffer.byteLength(code), opts.format);
-			let gzipSize = opts.showGzippedSize
-				? fileSize(gzip.sync(code), opts.format)
-				: "";
-			return opts.render(opts, size, gzipSize, bundle);
-		},
-
 		ongenerate(bundle, { code }) {
-			console.log(this.getData(bundle, code));
+			console.log(getData(opts)(bundle, code));
 		}
 	};
 }
